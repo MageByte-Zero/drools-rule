@@ -1,18 +1,26 @@
 package com.zero.framework.droolsrule;
 
 import com.zero.framework.droolsrule.model.Cat;
+import com.zero.framework.droolsrule.model.NumCount;
 import com.zero.framework.droolsrule.model.People;
+import com.zero.framework.droolsrule.service.GlobalService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootTest
 class DroolsRuleApplicationTests {
 
     @Autowired
     private KieSession session;
+
+    @Autowired
+    private GlobalService globalService;
 
 
     @Test
@@ -60,6 +68,25 @@ class DroolsRuleApplicationTests {
         session.fireAllRules();//执行规则
         System.out.println("test执行====" + people.toString());
     }
+
+    @Test
+    public void global() {
+        People people = new People();
+        people.setDrlType("global");
+        session.insert(people);//插入
+        //配置全局变量
+        List<People> list = new ArrayList<>();
+        NumCount numCount = new NumCount();
+        session.setGlobal("list", list);
+        session.setGlobal("numCount", numCount);
+        session.setGlobal("service", globalService);
+        session.fireAllRules();//执行规则
+        //取出全局变量值
+        System.out.println(session.getGlobal("list").toString());
+        System.out.println((session.getGlobal("numCount")).toString());
+
+    }
+
 
     @AfterEach
     public void runDispose() {
