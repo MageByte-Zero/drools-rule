@@ -3,8 +3,6 @@ package com.zero.framework.droolsrule.model;
 import lombok.Data;
 
 @Data
-public class Cat {
-    private int sex;
-
-    private String name;
+public class AreaPin {
+    private int code;
 }

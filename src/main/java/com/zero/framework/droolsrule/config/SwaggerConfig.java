@@ -35,8 +35,6 @@ public class SwaggerConfig {
                         .description("简单优雅的restfun风格，详细信息......")
                         //版本
                         .version("9.0")
-                        //作者个人信息
-//                        .contact(new Contact("青", "https://gblfy.com", "zero_develop@163.com"))
                         .license("The Apache License")
                         //服务条款
                         .build());

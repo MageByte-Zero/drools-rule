@@ -1,0 +1,10 @@
+package rules
+import com.zero.framework.droolsrule.model.AreaPin;
+import com.zero.framework.droolsrule.exception.NumberFormatException;
+rule "PinCodeValidation"
+dialect "java"
+	when
+		AreaPin(code != 0 && code not matches "^[0-9]{6}$")
+	then
+		throw new NumberFormatException("Invalid Area Pin Code. Must be a valid 6 digits number.");
+end

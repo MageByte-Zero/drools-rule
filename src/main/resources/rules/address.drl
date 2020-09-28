@@ -1,0 +1,13 @@
+package rules
+
+import com.zero.framework.droolsrule.fact.AddressCheckFact;
+
+global org.slf4j.Logger log
+
+rule "Postcode should be filled with exactly 5 numbers"
+    when
+        $checkFact : AddressCheckFact(ruleKey == "address" && postcode != null && postcode matches "([0-9]{5})");
+    then
+        $checkFact.setFact(true);
+		log.info("规则:{} 中打印日志：校验通过!", $checkFact.getRuleKey());
+end
