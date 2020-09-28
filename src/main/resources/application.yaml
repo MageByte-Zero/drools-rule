@@ -1,5 +1,13 @@
 spring:
   application:
     name: drools-rule
+  datasource:
+    url: jdbc:mysql://172.16.87.26:3350/my_stu
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+
 server:
   port: 8080

@@ -1,5 +1,6 @@
 package com.zero.framework.droolsrule.config;
 
+import com.zero.framework.droolsrule.utils.KieUtils;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.*;
@@ -47,7 +48,11 @@ public class KiaSessionConfig {
         });
         KieBuilder kieBuilder = getKieServices().newKieBuilder(kieFileSystem());
         kieBuilder.buildAll();
-        return getKieServices().newKieContainer(kieRepository.getDefaultReleaseId());
+
+        KieContainer kieContainer = getKieServices().newKieContainer(kieRepository.getDefaultReleaseId());
+        KieUtils.setKieContainer(kieContainer);
+
+        return kieContainer;
     }
 
     @Bean

@@ -2,10 +2,11 @@ package com.zero.framework.droolsrule.controller;
 
 import com.zero.framework.droolsrule.fact.AddressCheckFact;
 import com.zero.framework.droolsrule.model.AreaPin;
+import com.zero.framework.droolsrule.service.ReloadDroolsRulesService;
+import com.zero.framework.droolsrule.utils.KieUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,13 +23,14 @@ import java.util.Map;
 @Api(tags = {"规则引擎"})
 @RestController
 public class AreaRestController {
+
     @Autowired
-    private KieContainer kieContainer;
+    private ReloadDroolsRulesService reloadDroolsRulesService;
 
     @ApiOperation("校验地区")
     @GetMapping("/area/name/{pinCode}")
     public ResponseEntity<String> getAreaByPinCode(@PathVariable int pinCode) {
-        KieSession kieSession = kieContainer.newKieSession();
+        KieSession kieSession = KieUtils.getKieContainer().newKieSession();
         AreaPin areaPin = new AreaPin();
         areaPin.setCode(pinCode);
 
@@ -49,7 +51,7 @@ public class AreaRestController {
         addressCheckFact.setStreet("码哥字节大街");
         addressCheckFact.setPostcode(generateRandom(num));
 
-        KieSession kieSession = kieContainer.newKieSession();
+        KieSession kieSession = KieUtils.getKieContainer().newKieSession();
         kieSession.setGlobal("log", log);
 
         // 将 fact 插入 工作内存
@@ -60,6 +62,12 @@ public class AreaRestController {
         System.out.println("触发了" + ruleFiredCount + "条规则." + addressCheckFact.getRuleKey() + "的结果为"
                 + addressCheckFact.getFact());
 
+    }
+
+    @ApiOperation("重新加载所有规则")
+    @GetMapping("/reload")
+    public void reload() {
+        reloadDroolsRulesService.reload();
     }
 
     private String getAreaByCode(int pin) {
